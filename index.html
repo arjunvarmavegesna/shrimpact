@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LABS Foundation — Aquaculture for Farmers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ocean: #0B4F6C;
+  --deep: #062A3A;
+  --aqua: #18A0A0;
+  --teal: #2EC4B6;
+  --leaf: #3A8B4A;
+  --lime: #7BC950;
+  --gold: #E8A838;
+  --coral: #E85D3A;
+  --sand: #F5F0E8;
+  --cream: #FFFDF7;
+  --slate: #2D3436;
+  --mist: #E8F4F4;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: var(--slate);
+  background: var(--cream);
+  overflow-x: hidden;
+}
+
+/* ---- WATER TEXTURE OVERLAY ---- */
+.water-texture {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  background:
+    radial-gradient(ellipse at 20% 50%, var(--aqua) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, var(--teal) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, var(--ocean) 0%, transparent 50%);
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,253,247,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(11,79,108,0.08);
+  transition: all 0.4s ease;
+}
+
+nav.scrolled {
+  padding: 0.6rem 2rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 0.75rem;
+  text-decoration: none; color: var(--deep);
+}
+
+.nav-logo {
+  width: 44px; height: 44px;
+}
+
+.nav-brand-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.nav-brand-text span {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-top: 2px;
+}
+
+.nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--slate);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--aqua);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--ocean); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--ocean);
+  color: white !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+}
+
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--aqua) !important; }
+
+.mobile-menu { display: none; background: none; border: none; cursor: pointer; }
+
+/* ---- HERO ---- */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 30%, rgba(46,196,182,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 70%, rgba(11,79,108,0.08) 0%, transparent 50%);
+}
+
+.hero-wave {
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 120px;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative; z-index: 2;
+}
+
+.hero-left { animation: fadeInUp 1s ease; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--mist);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ocean);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(24,160,160,0.2);
+}
+
+.hero-badge .dot {
+  width: 6px; height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  color: var(--deep);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--aqua);
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #5a6872;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--ocean);
+  color: white;
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  border: none; cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--aqua);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(24,160,160,0.3);
+}
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  color: var(--ocean);
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid var(--ocean);
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: var(--ocean);
+  color: white;
+}
+
+.hero-stats {
+  display: flex; gap: 2.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(11,79,108,0.1);
+}
+
+.stat-item h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--aqua);
+}
+
+.stat-item p {
+  font-size: 0.75rem;
+  color: #8a9ba8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Hero illustration */
+.hero-right {
+  position: relative;
+  animation: fadeInUp 1s ease 0.3s both;
+}
+
+.hero-illustration {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-circle {
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--mist) 0%, rgba(46,196,182,0.15) 100%);
+  position: relative;
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero-circle::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 1px dashed rgba(24,160,160,0.25);
+  animation: spin 30s linear infinite;
+}
+
+.hero-logo-large {
+  width: 200px; height: 200px;
+}
+
+.floating-card {
+  position: absolute;
+  background: white;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  animation: floatCard 4s ease-in-out infinite;
+}
+
+.floating-card .icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+
+.card-fish { top: 10%; right: -10%; animation-delay: 0s; }
+.card-fish .icon { background: rgba(24,160,160,0.15); }
+
+.card-crop { bottom: 15%; left: -5%; animation-delay: 1.5s; }
+.card-crop .icon { background: rgba(58,139,74,0.15); }
+
+.card-co2 { top: 50%; right: -15%; animation-delay: 3s; }
+.card-co2 .icon { background: rgba(232,163,56,0.15); }
+
+/* ---- SECTIONS COMMON ---- */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.section-pad {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  color: var(--deep);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: #6b7f8e;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* ---- ABOUT ---- */
+.about {
+  background: white;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.about-image {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, var(--ocean), var(--aqua));
+  display: flex; align-items: center; justify-content: center;
+}
+
+.about-image svg {
+  width: 70%;
+  opacity: 0.9;
+}
+
+.about-features {
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+
+.about-feature {
+  display: flex; gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 16px;
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.about-feature:hover {
+  background: var(--mist);
+  transform: translateX(8px);
+}
+
+.about-feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.about-feature h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--deep);
+}
+
+.about-feature p {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  line-height: 1.5;
+}
+
+/* ---- AQUACULTURE WHEEL ---- */
+.wheel-section {
+  background: var(--deep);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.wheel-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -20%;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24,160,160,0.15), transparent 70%);
+}
+
+.wheel-section .section-label { color: var(--teal); }
+.wheel-section .section-title { color: white; }
+.wheel-section .section-desc { color: rgba(255,255,255,0.6); }
+
+.wheel-container {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.wheel-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.wheel-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--aqua), var(--teal));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.wheel-card:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-4px);
+  border-color: rgba(46,196,182,0.3);
+}
+
+.wheel-card:hover::before { opacity: 1; }
+
+.wheel-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.wheel-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.wheel-card p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+.wheel-card .tag {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ---- PROGRAMS ---- */
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.program-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid rgba(11,79,108,0.08);
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(11,79,108,0.1);
+}
+
+.program-top {
+  height: 180px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.program-top .program-pattern {
+  position: absolute; inset: 0;
+  opacity: 0.1;
+}
+
+.program-top .program-icon {
+  position: relative; z-index: 1;
+  font-size: 3rem;
+}
+
+.program-body {
+  padding: 1.75rem;
+}
+
+.program-body h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  color: var(--deep);
+  margin-bottom: 0.5rem;
+}
+
+.program-body p {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.program-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--aqua);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: gap 0.3s;
+}
+
+.program-link:hover { gap: 0.75rem; }
+
+/* ---- IMPACT ---- */
+.impact {
+  background: linear-gradient(135deg, var(--mist) 0%, white 100%);
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.impact-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid rgba(11,79,108,0.06);
+  transition: all 0.3s;
+}
+
+.impact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(11,79,108,0.08);
+}
+
+.impact-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  color: var(--aqua);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.impact-label {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  font-weight: 500;
+}
+
+/* ---- CTA ---- */
+.cta-section {
+  background: var(--ocean);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(46,196,182,0.15);
+}
+
+.cta-section::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(232,163,56,0.08);
+}
+
+.cta-content {
+  text-align: center;
+  position: relative; z-index: 2;
+}
+
+.cta-content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.cta-content p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1.1rem;
+  max-width: 550px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: flex; gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-white {
+  background: white;
+  color: var(--ocean);
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.btn-outline-white {
+  background: transparent;
+  color: white;
+  padding: 0.85rem 2rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.btn-outline-white:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--deep);
+  color: rgba(255,255,255,0.5);
+  padding: 4rem 2rem 2rem;
+}
+
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-top: 1rem;
+  max-width: 300px;
+}
+
+.footer-col h4 {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.footer-col a {
+  display: block;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.82rem;
+  padding: 0.3rem 0;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--teal); }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scroll animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .wheel-container { grid-template-columns: repeat(2, 1fr); }
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-menu { display: block; }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-desc { margin: 0 auto 2rem; }
+  .hero-buttons { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-right { display: none; }
+
+  .about-grid { grid-template-columns: 1fr; }
+  .programs-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+
+  .section-pad { padding: 4rem 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .wheel-container { grid-template-columns: 1fr; }
+  .impact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="water-texture"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <svg class="nav-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Gear outline -->
+      <path d="M50 8 L58 20 L72 16 L70 32 L86 36 L78 50 L86 64 L70 68 L72 84 L58 80 L50 92 L42 80 L28 84 L30 68 L14 64 L22 50 L14 36 L30 32 L28 16 L42 20 Z" fill="none" stroke="#0B4F6C" stroke-width="3" stroke-linejoin="round"/>
+      <!-- Lightbulb -->
+      <circle cx="50" cy="44" r="16" fill="none" stroke="#18A0A0" stroke-width="2.5"/>
+      <path d="M43 56 Q43 64 44 68 L56 68 Q57 64 57 56" fill="none" stroke="#18A0A0" stroke-width="2.5"/>
+      <line x1="44" y1="72" x2="56" y2="72" stroke="#18A0A0" stroke-width="2"/>
+      <!-- Rice/crop inside bulb -->
+      <path d="M50 32 L50 55 M46 38 Q50 34 50 38 M54 38 Q50 34 50 38 M44 44 Q48 40 48 44 M56 44 Q52 40 52 44" fill="none" stroke="#3A8B4A" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="nav-brand-text">
+      LABS Foundation
+      <span>Livelihood Advancement Business School</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#aquaculture">Aquaculture</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#contact" class="nav-cta">Get Involved</a></li>
+  </ul>
+  <button class="mobile-menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--deep)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Sustainable Aquaculture Initiative
+      </div>
+      <h1>Empowering Farmers Through <em>Sustainable</em> Aquaculture</h1>
+      <p class="hero-desc">LABS Foundation transforms rural livelihoods by equipping farmers with modern aquaculture techniques that are productive, profitable, and planet-friendly.</p>
+      <div class="hero-buttons">
+        <a href="#programs" class="btn-primary">
+          Explore Programs
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#about" class="btn-secondary">Learn More</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h3>12K+</h3>
+          <p>Farmers Trained</p>
+        </div>
+        <div class="stat-item">
+          <h3>85%</h3>
+          <p>Income Increase</p>
+        </div>
+        <div class="stat-item">
+          <h3>40%</h3>
+          <p>CO₂ Reduction</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-illustration">
+        <div class="hero-circle">
+          <!-- Large Logo SVG -->
+          <svg class="hero-logo-large" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0B4F6C"/>
+                <stop offset="100%" stop-color="#18A0A0"/>
+              </linearGradient>
+            </defs>
+            <!-- Gear -->
+            <path d="M100 16 L116 40 L144 32 L140 64 L172 72 L156 100 L172 128 L140 136 L144 168 L116 160 L100 184 L84 160 L56 168 L60 136 L28 128 L44 100 L28 72 L60 64 L56 32 L84 40 Z" fill="url(#gearGrad)" opacity="0.12" stroke="url(#gearGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- Lightbulb glass -->
+            <circle cx="100" cy="88" r="38" fill="none" stroke="url(#gearGrad)" stroke-width="3"/>
+            <!-- Bulb base -->
+            <path d="M82 118 Q82 140 86 148 L114 148 Q118 140 118 118" fill="none" stroke="url(#gearGrad)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="86" y1="154" x2="114" y2="154" stroke="url(#gearGrad)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="90" y1="160" x2="110" y2="160" stroke="url(#gearGrad)" stroke-width="2" stroke-linecap="round"/>
+            <!-- Rice/crop stalks -->
+            <g stroke="#3A8B4A" stroke-width="2" stroke-linecap="round" fill="none">
+              <path d="M100 60 L100 115"/>
+              <path d="M92 70 Q100 62 100 72"/>
+              <path d="M108 70 Q100 62 100 72"/>
+              <path d="M88 82 Q96 74 96 84"/>
+              <path d="M112 82 Q104 74 104 84"/>
+              <path d="M85 94 Q94 86 94 96"/>
+              <path d="M115 94 Q106 86 106 96"/>
+            </g>
+            <!-- Rice grains -->
+            <g fill="#7BC950" opacity="0.8">
+              <ellipse cx="88" cy="68" rx="3" ry="5" transform="rotate(-30 88 68)"/>
+              <ellipse cx="112" cy="68" rx="3" ry="5" transform="rotate(30 112 68)"/>
+              <ellipse cx="84" cy="80" rx="3" ry="5" transform="rotate(-30 84 80)"/>
+              <ellipse cx="116" cy="80" rx="3" ry="5" transform="rotate(30 116 80)"/>
+              <ellipse cx="81" cy="92" rx="3" ry="5" transform="rotate(-30 81 92)"/>
+              <ellipse cx="119" cy="92" rx="3" ry="5" transform="rotate(30 119 92)"/>
+            </g>
+          </svg>
+        </div>
+        <!-- Floating cards -->
+        <div class="floating-card card-fish">
+          <div class="icon">🐟</div>
+          <div>
+            <strong>Fish Farming</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">Sustainable Species</span>
+          </div>
+        </div>
+        <div class="floating-card card-crop">
+          <div class="icon">🌾</div>
+          <div>
+            <strong>Feed Systems</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">Organic Ingredients</span>
+          </div>
+        </div>
+        <div class="floating-card card-co2">
+          <div class="icon">🌿</div>
+          <div>
+            <strong>Low Carbon</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">40% CO₂ Reduced</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0 60 Q360 120 720 60 Q1080 0 1440 60 L1440 120 L0 120Z" fill="white"/>
+  </svg>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-pad">
+    <div class="reveal">
+      <p class="section-label">About LABS Foundation</p>
+      <h2 class="section-title">Building Sustainable Livelihoods<br>Through Innovation</h2>
+      <p class="section-desc">Livelihood Advancement Business School Foundation integrates agricultural science, business training, and environmental stewardship to transform farming communities.</p>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-image">
+        <!-- Decorative illustration inside -->
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Water waves -->
+          <g opacity="0.3">
+            <path d="M0 180 Q100 160 200 180 Q300 200 400 180 L400 300 L0 300Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M0 200 Q100 180 200 200 Q300 220 400 200 L400 300 L0 300Z" fill="rgba(255,255,255,0.15)"/>
+            <path d="M0 220 Q100 200 200 220 Q300 240 400 220 L400 300 L0 300Z" fill="rgba(255,255,255,0.1)"/>
+          </g>
+          <!-- Fish -->
+          <g transform="translate(160, 220)" opacity="0.7">
+            <ellipse cx="0" cy="0" rx="30" ry="12" fill="white"/>
+            <polygon points="28,-10 40,0 28,10" fill="white"/>
+            <circle cx="-15" cy="-3" r="3" fill="#0B4F6C"/>
+          </g>
+          <g transform="translate(280, 240)" opacity="0.5">
+            <ellipse cx="0" cy="0" rx="20" ry="8" fill="white"/>
+            <polygon points="18,-7 28,0 18,7" fill="white"/>
+            <circle cx="-10" cy="-2" r="2" fill="#0B4F6C"/>
+          </g>
+          <!-- Person farming -->
+          <g transform="translate(200, 100)" opacity="0.8">
+            <circle cx="0" cy="0" r="18" fill="white" opacity="0.9"/>
+            <rect x="-12" y="22" width="24" height="40" rx="8" fill="white" opacity="0.8"/>
+            <!-- Hands holding crop -->
+            <line x1="-20" y1="35" x2="-35" y2="25" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+            <line x1="20" y1="35" x2="35" y2="25" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+            <!-- Plant -->
+            <line x1="0" y1="-25" x2="0" y2="-55" stroke="#7BC950" stroke-width="2.5"/>
+            <path d="M-8 -40 Q0 -48 0 -40" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M8 -40 Q0 -48 0 -40" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M-10 -50 Q0 -58 0 -50" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M10 -50 Q0 -58 0 -50" stroke="#7BC950" stroke-width="2" fill="none"/>
+          </g>
+          <!-- Bubbles -->
+          <circle cx="100" cy="250" r="4" fill="white" opacity="0.3"/>
+          <circle cx="120" cy="235" r="3" fill="white" opacity="0.2"/>
+          <circle cx="300" cy="260" r="5" fill="white" opacity="0.25"/>
+          <circle cx="320" cy="245" r="3" fill="white" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(24,160,160,0.12);">🎓</div>
+          <div>
+            <h4>Farmer Training Programs</h4>
+            <p>Hands-on workshops in modern aquaculture practices, from pond management to species selection and feed optimization.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(58,139,74,0.12);">🔬</div>
+          <div>
+            <h4>Research & Innovation</h4>
+            <p>Developing climate-resilient farming techniques through selective breeding, sustainable feed formulations, and low-carbon rearing systems.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(232,163,56,0.12);">🤝</div>
+          <div>
+            <h4>Market Linkages</h4>
+            <p>Connecting farmers directly with buyers, reducing middleman costs, and ensuring fair prices for sustainably farmed produce.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(232,93,58,0.12);">🌍</div>
+          <div>
+            <h4>Environmental Stewardship</h4>
+            <p>Reducing the carbon footprint of aquaculture through GHG monitoring, conservation guidelines, and eco-friendly practices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AQUACULTURE WHEEL -->
+<section class="wheel-section" id="aquaculture">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Sustainable Aquaculture Ecosystem</p>
+      <h2 class="section-title">Our Integrated Approach</h2>
+      <p class="section-desc" style="margin:0 auto;">Every element of the aquaculture value chain optimized for productivity, sustainability, and farmer prosperity.</p>
+    </div>
+    <div class="wheel-container reveal">
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(46,196,182,0.15);">🐟</div>
+        <h3>Farmed Species</h3>
+        <p>Selecting climate-adapted, high-yield species suited to local water conditions and market demand across regions.</p>
+        <span class="tag" style="background:rgba(46,196,182,0.15);color:var(--teal);">Biodiversity</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(123,201,80,0.15);">🧬</div>
+        <h3>Selective Breeding</h3>
+        <p>Genetic improvement programs that develop disease-resistant, faster-growing strains while maintaining genetic diversity.</p>
+        <span class="tag" style="background:rgba(123,201,80,0.15);color:var(--lime);">Genetics</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(11,79,108,0.15);">🏗️</div>
+        <h3>Rearing Systems</h3>
+        <p>Modern pond, cage, and recirculating aquaculture systems (RAS) designed for maximum yield with minimal water usage.</p>
+        <span class="tag" style="background:rgba(11,79,108,0.15);color:var(--ocean);">Infrastructure</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(232,163,56,0.15);">🎣</div>
+        <h3>Capture Fisheries</h3>
+        <p>Responsible wild-catch practices integrated with aquaculture to maintain ecosystem balance and supplement farm output.</p>
+        <span class="tag" style="background:rgba(232,163,56,0.15);color:var(--gold);">Wild Catch</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(232,93,58,0.15);">📋</div>
+        <h3>Consumption Guidelines</h3>
+        <p>Nutritional awareness programs promoting safe consumption, food safety standards, and value-added processing.</p>
+        <span class="tag" style="background:rgba(232,93,58,0.15);color:var(--coral);">Nutrition</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(46,196,182,0.15);">💨</div>
+        <h3>GHG Reduction</h3>
+        <p>Monitoring and reducing methane (CH₄) and nitrous oxide (N₂O) emissions from ponds through aeration and bioremediation.</p>
+        <span class="tag" style="background:rgba(46,196,182,0.15);color:var(--teal);">Climate</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(123,201,80,0.15);">🌾</div>
+        <h3>Feed & Ingredients</h3>
+        <p>Locally-sourced, sustainable feed formulations using plant-based proteins and insect meal to replace fish meal dependency.</p>
+        <span class="tag" style="background:rgba(123,201,80,0.15);color:var(--lime);">Nutrition</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(11,79,108,0.15);">👣</div>
+        <h3>Carbon Footprint</h3>
+        <p>Life-cycle assessment tools helping farmers track, report, and offset their carbon emissions across the entire supply chain.</p>
+        <span class="tag" style="background:rgba(11,79,108,0.15);color:var(--ocean);">Tracking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Our Programs</p>
+      <h2 class="section-title">Pathways to Prosperity</h2>
+      <p class="section-desc" style="margin:0 auto;">Comprehensive programs designed for farmers at every stage of their aquaculture journey.</p>
+    </div>
+    <div class="programs-grid reveal">
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #E8F4F4, #d0eded);">
+          <div class="program-icon">🐠</div>
+        </div>
+        <div class="program-body">
+          <h3>Beginner Fish Farming</h3>
+          <p>A 12-week immersive program covering pond construction, water quality management, species selection, and your first harvest cycle.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #E8F0E4, #d0e8c8);">
+          <div class="program-icon">🌿</div>
+        </div>
+        <div class="program-body">
+          <h3>Sustainable Practices</h3>
+          <p>Advanced certification in low-carbon aquaculture, organic feed production, integrated multi-trophic systems, and carbon credit eligibility.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #FFF3E0, #FFE0B2);">
+          <div class="program-icon">📊</div>
+        </div>
+        <div class="program-body">
+          <h3>Agri-Business School</h3>
+          <p>Business skills for farmer-entrepreneurs: financial planning, market analysis, supply chain management, and direct-to-consumer sales.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Our Impact</p>
+      <h2 class="section-title">Transforming Communities</h2>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="impact-card">
+        <div class="impact-number">12,400+</div>
+        <div class="impact-label">Farmers Trained</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">850</div>
+        <div class="impact-label">Ponds Established</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">₹42Cr</div>
+        <div class="impact-label">Revenue Generated</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">40%</div>
+        <div class="impact-label">Avg CO₂ Reduction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="section-pad">
+    <div class="cta-content reveal">
+      <h2>Ready to Transform<br>Your Farm?</h2>
+      <p>Join thousands of farmers building sustainable, profitable aquaculture operations with LABS Foundation's expert guidance.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-white">
+          Enroll Now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn-outline-white">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-brand" style="color:white;">
+        <svg class="nav-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 8 L58 20 L72 16 L70 32 L86 36 L78 50 L86 64 L70 68 L72 84 L58 80 L50 92 L42 80 L28 84 L30 68 L14 64 L22 50 L14 36 L30 32 L28 16 L42 20 Z" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="50" cy="44" r="16" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+          <path d="M43 56 Q43 64 44 68 L56 68 Q57 64 57 56" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+          <path d="M50 32 L50 55 M46 38 Q50 34 50 38 M54 38 Q50 34 50 38" fill="none" stroke="#7BC950" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="nav-brand-text" style="color:white;">
+          LABS Foundation
+          <span style="color:var(--teal);">Livelihood Advancement Business School</span>
+        </div>
+      </a>
+      <p>Transforming rural livelihoods through sustainable aquaculture innovation, farmer empowerment, and environmental stewardship.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <a href="#">Fish Farming</a>
+      <a href="#">Sustainable Practices</a>
+      <a href="#">Agri-Business School</a>
+      <a href="#">Selective Breeding</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Research Papers</a>
+      <a href="#">Farmer Handbook</a>
+      <a href="#">Carbon Calculator</a>
+      <a href="#">Market Prices</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="#">info@labsfoundation.in</a>
+      <a href="#">+91 XXXX XXXXXX</a>
+      <a href="#">Twitter / X</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 LABS Foundation. All rights reserved.</span>
+    <span>Built with 🌱 for Indian Farmers</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Counter animation for impact numbers
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const numbers = entry.target.querySelectorAll('.impact-number');
+      numbers.forEach(num => {
+        const text = num.textContent;
+        const match = text.match(/[\d,]+/);
+        if (match) {
+          const target = parseInt(match[0].replace(/,/g, ''));
+          const prefix = text.substring(0, text.indexOf(match[0]));
+          const suffix = text.substring(text.indexOf(match[0]) + match[0].length);
+          let current = 0;
+          const increment = target / 60;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            const formatted = Math.floor(current).toLocaleString('en-IN');
+            num.textContent = prefix + formatted + suffix;
+          }, 25);
+        }
+      });
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const impactGrid = document.querySelector('.impact-grid');
+if (impactGrid) counterObserver.observe(impactGrid);
+</script>
+
+</body>
+</html>
