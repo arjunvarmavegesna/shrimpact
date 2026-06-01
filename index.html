@@ -3,218 +3,2202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shrimpact — Pitch Cheat Sheet (₹60k)</title>
+<title>Shrimpact — Aquaculture for Farmers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @page { size: A4 portrait; margin: 11mm; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root{
-    --ink:#11252e; --mut:#5d7682; --ocean:#0B4F6C; --aqua:#0e8f8f;
-    --teal:#2EC4B6; --coral:#E85D3A; --gold:#C8860a; --line:#d7e3e6;
-    --tint:#f1f7f7; --sand:#FBF8F2;
+:root {
+  --ocean: #0B4F6C;
+  --deep: #062A3A;
+  --aqua: #18A0A0;
+  --teal: #2EC4B6;
+  --leaf: #3A8B4A;
+  --lime: #7BC950;
+  --gold: #E8A838;
+  --coral: #E85D3A;
+  --sand: #F5F0E8;
+  --cream: #FFFDF7;
+  --slate: #2D3436;
+  --mist: #E8F4F4;
+  /* ---- design tokens ---- */
+  --radius: 20px;
+  --shadow-sm: 0 2px 12px rgba(11,79,108,0.06);
+  --shadow-md: 0 14px 44px rgba(11,79,108,0.10);
+  --shadow-lg: 0 34px 90px rgba(11,79,108,0.18);
+  --grad-aqua: linear-gradient(120deg, var(--aqua) 0%, var(--teal) 100%);
+  --grad-brand: linear-gradient(120deg, var(--ocean) 0%, var(--aqua) 55%, var(--teal) 100%);
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: var(--slate);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- WATER TEXTURE OVERLAY ---- */
+.water-texture {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  background:
+    radial-gradient(ellipse at 20% 50%, var(--aqua) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, var(--teal) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, var(--ocean) 0%, transparent 50%);
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,253,247,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(11,79,108,0.08);
+  transition: all 0.4s ease;
+}
+
+nav.scrolled {
+  padding: 0.6rem 2rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 0.75rem;
+  text-decoration: none; color: var(--deep);
+}
+
+.nav-logo {
+  font-size: 38px;
+  line-height: 1;
+  display: inline-block;
+  animation: bob 3.5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+.nav-brand-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--slate);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--aqua);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--ocean); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--ocean);
+  color: white !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+}
+
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--aqua) !important; }
+
+.mobile-menu { display: none; background: none; border: none; cursor: pointer; }
+
+/* ---- HERO ---- */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 30%, rgba(46,196,182,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 70%, rgba(11,79,108,0.08) 0%, transparent 50%);
+}
+
+.hero-wave {
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 120px;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative; z-index: 2;
+}
+
+.hero-left { animation: fadeInUp 1s ease; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--mist);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ocean);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(24,160,160,0.2);
+}
+
+.hero-badge .dot {
+  width: 6px; height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--deep);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--aqua);
+  background: var(--grad-aqua);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #5a6872;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--grad-brand);
+  background-size: 160% 160%;
+  background-position: 0% 50%;
+  color: white;
+  padding: 0.9rem 2.1rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform 0.3s, box-shadow 0.3s, background-position 0.5s;
+  box-shadow: 0 10px 26px rgba(11,79,108,0.20);
+  border: none; cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-position: 100% 50%;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(24,160,160,0.38);
+}
+
+.btn-primary svg { transition: transform 0.3s; }
+.btn-primary:hover svg { transform: translateX(3px); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  color: var(--ocean);
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid var(--ocean);
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: var(--ocean);
+  color: white;
+}
+
+.hero-stats {
+  display: flex; gap: 2.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(11,79,108,0.1);
+}
+
+.stat-item h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--aqua);
+}
+
+.stat-item p {
+  font-size: 0.75rem;
+  color: #8a9ba8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Hero illustration */
+.hero-right {
+  position: relative;
+  animation: fadeInUp 1s ease 0.3s both;
+}
+
+.hero-illustration {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-circle {
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0%, transparent 45%),
+    linear-gradient(135deg, var(--mist) 0%, rgba(46,196,182,0.22) 100%);
+  position: relative;
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 6px 40px rgba(255,255,255,0.7), var(--shadow-lg);
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero-circle::before {
+  content: '';
+  position: absolute;
+  inset: -22px;
+  border-radius: 50%;
+  border: 1px dashed rgba(24,160,160,0.3);
+  animation: spin 30s linear infinite;
+}
+
+.hero-circle::after {
+  content: '';
+  position: absolute;
+  inset: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(46,196,182,0.22);
+}
+
+.hero-logo-large {
+  font-size: 190px;
+  line-height: 1;
+  display: inline-block;
+  animation: swim 5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+.floating-card {
+  position: absolute;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  z-index: 3;
+  animation: floatCard 4s ease-in-out infinite;
+}
+
+.floating-card .icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+
+.card-fish { top: 10%; right: -10%; animation-delay: 0s; }
+.card-fish .icon { background: rgba(24,160,160,0.15); }
+
+.card-crop { bottom: 15%; left: -5%; animation-delay: 1.5s; }
+.card-crop .icon { background: rgba(58,139,74,0.15); }
+
+.card-co2 { top: 50%; right: -15%; animation-delay: 3s; }
+.card-co2 .icon { background: rgba(232,163,56,0.15); }
+
+/* ---- SECTIONS COMMON ---- */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.section-pad {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  color: var(--deep);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: #6b7f8e;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* ---- ABOUT ---- */
+.about {
+  background: white;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.about-image {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, var(--ocean), var(--aqua));
+  display: flex; align-items: center; justify-content: center;
+}
+
+.about-image svg {
+  width: 70%;
+  opacity: 0.9;
+}
+
+.about-features {
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+
+.about-feature {
+  display: flex; gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 16px;
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.about-feature:hover {
+  background: var(--mist);
+  transform: translateX(8px);
+}
+
+.about-feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.about-feature h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--deep);
+}
+
+.about-feature p {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  line-height: 1.5;
+}
+
+/* ---- AQUACULTURE WHEEL ---- */
+.wheel-section {
+  background: var(--deep);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.wheel-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -20%;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24,160,160,0.15), transparent 70%);
+}
+
+.wheel-section .section-label { color: var(--teal); }
+.wheel-section .section-title { color: white; }
+.wheel-section .section-desc { color: rgba(255,255,255,0.6); }
+
+.wheel-container {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.wheel-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.wheel-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--aqua), var(--teal));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.wheel-card:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-4px);
+  border-color: rgba(46,196,182,0.3);
+}
+
+.wheel-card:hover::before { opacity: 1; }
+
+.wheel-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.wheel-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.wheel-card p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+.wheel-card .tag {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ---- PROGRAMS ---- */
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.program-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid rgba(11,79,108,0.08);
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(11,79,108,0.1);
+}
+
+.program-top {
+  height: 180px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.program-top .program-pattern {
+  position: absolute; inset: 0;
+  opacity: 0.1;
+}
+
+.program-top .program-icon {
+  position: relative; z-index: 1;
+  font-size: 3rem;
+}
+
+.program-body {
+  padding: 1.75rem;
+}
+
+.program-body h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  color: var(--deep);
+  margin-bottom: 0.5rem;
+}
+
+.program-body p {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.program-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--aqua);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: gap 0.3s;
+}
+
+.program-link:hover { gap: 0.75rem; }
+
+/* ---- IMPACT ---- */
+.impact {
+  background: linear-gradient(135deg, var(--mist) 0%, white 100%);
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.impact-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid rgba(11,79,108,0.06);
+  transition: all 0.3s;
+}
+
+.impact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(11,79,108,0.08);
+}
+
+.impact-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  color: var(--aqua);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.impact-label {
+  font-size: 0.85rem;
+  color: #6b7f8e;
+  font-weight: 500;
+}
+
+/* ---- CTA ---- */
+.cta-section {
+  background: var(--ocean);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(46,196,182,0.15);
+}
+
+.cta-section::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(232,163,56,0.08);
+}
+
+.cta-content {
+  text-align: center;
+  position: relative; z-index: 2;
+}
+
+.cta-content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.cta-content p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1.1rem;
+  max-width: 550px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: flex; gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-white {
+  background: white;
+  color: var(--ocean);
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.btn-outline-white {
+  background: transparent;
+  color: white;
+  padding: 0.85rem 2rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.btn-outline-white:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--deep);
+  color: rgba(255,255,255,0.5);
+  padding: 4rem 2rem 2rem;
+}
+
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-top: 1rem;
+  max-width: 300px;
+}
+
+.footer-col h4 {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.footer-col a {
+  display: block;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.82rem;
+  padding: 0.3rem 0;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--teal); }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes swim {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(-5deg); }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scroll animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .wheel-container { grid-template-columns: repeat(2, 1fr); }
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0.9rem 1.25rem; }
+  nav.scrolled { padding: 0.6rem 1.25rem; }
+
+  /* Mobile dropdown menu */
+  .mobile-menu { display: block; }
+  .nav-links {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: rgba(255,253,247,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 0.25rem 1.25rem 1rem;
+    border-bottom: 1px solid rgba(11,79,108,0.08);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
   }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink); background:#e9eef0; line-height:1.4;
-    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  .nav-links.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav-links li { width: 100%; }
+  .nav-links a {
+    display: block;
+    padding: 0.9rem 0.25rem;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(11,79,108,0.06);
+  }
+  .nav-links a::after { display: none; }
+  .nav-links .nav-cta {
+    text-align: center;
+    margin-top: 0.85rem;
+    padding: 0.85rem 1.25rem !important;
+    border-bottom: none;
   }
 
-  .toolbar{
-    max-width:820px; margin:18px auto 10px; padding:0 6px;
-    display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
-  }
-  .toolbar p{ font-size:.8rem; color:#48606b; }
-  .toolbar button{
-    border:none; cursor:pointer; font:inherit; font-weight:700; font-size:.85rem;
-    background:var(--ocean); color:#fff; padding:.6rem 1.2rem; border-radius:8px;
-  }
-  .toolbar button:hover{ background:var(--aqua); }
-
-  .sheet{
-    max-width:820px; margin:0 auto 40px; background:#fff; color:var(--ink);
-    padding:20px 24px 18px; box-shadow:0 10px 40px rgba(11,79,108,.12);
-    border-radius:6px;
+  .hero { padding: 6.5rem 1.25rem 3rem; }
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 
-  header{ border-bottom:2.5px solid var(--ocean); padding-bottom:9px; margin-bottom:12px; }
-  .brand{ font-size:1.25rem; font-weight:800; letter-spacing:.01em; color:var(--ocean); }
-  .brand .em{ font-size:1.1rem; }
-  .goal{ font-size:.86rem; color:var(--mut); margin-top:3px; }
-  .goal b{ color:var(--coral); }
+  .hero-desc { margin: 0 auto 2rem; }
+  .hero-buttons { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-right { display: none; }
 
-  h2{
-    font-size:.74rem; text-transform:uppercase; letter-spacing:.13em;
-    color:var(--aqua); font-weight:800; margin-bottom:8px;
+  .about-grid { grid-template-columns: 1fr; }
+  .programs-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+
+  .section-pad { padding: 4rem 1.25rem; }
+  .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .wheel-container { grid-template-columns: 1fr; }
+  .impact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; gap: 1rem; }
+}
+
+/* ============ DESIGN ENHANCEMENTS ============ */
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0;
+  background: var(--grad-aqua);
+  box-shadow: 0 0 12px rgba(46,196,182,0.6);
+  z-index: 200;
+  transition: width 0.08s linear;
+}
+
+/* Hero decorative orbs + dot grid */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  opacity: 0.55;
+  z-index: 1;
+  pointer-events: none;
+}
+.orb-1 {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(46,196,182,0.5), transparent 70%);
+  top: -90px; right: -50px;
+  animation: drift 15s ease-in-out infinite;
+}
+.orb-2 {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(123,201,80,0.32), transparent 70%);
+  bottom: -70px; left: -50px;
+  animation: drift 19s ease-in-out infinite reverse;
+}
+.hero-dots {
+  position: absolute; inset: 0;
+  z-index: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(11,79,108,0.07) 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 25%, transparent 75%);
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(22px, -26px); }
+}
+
+/* Gradient numerals */
+.impact-number, .stat-item h3 {
+  background: var(--grad-aqua);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Section label accent */
+.section-label {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.section-label::before {
+  content: '';
+  width: 22px; height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+/* Softer default card depth */
+.program-card { box-shadow: var(--shadow-sm); }
+
+/* Staggered child reveals inside grids */
+.reveal > .wheel-card,
+.reveal > .program-card,
+.reveal > .impact-card {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible > .wheel-card,
+.reveal.visible > .program-card,
+.reveal.visible > .impact-card {
+  opacity: 1;
+  transform: none;
+}
+.reveal.visible > *:nth-child(1) { transition-delay: 0.02s; }
+.reveal.visible > *:nth-child(2) { transition-delay: 0.09s; }
+.reveal.visible > *:nth-child(3) { transition-delay: 0.16s; }
+.reveal.visible > *:nth-child(4) { transition-delay: 0.23s; }
+.reveal.visible > *:nth-child(5) { transition-delay: 0.30s; }
+.reveal.visible > *:nth-child(6) { transition-delay: 0.37s; }
+.reveal.visible > *:nth-child(7) { transition-delay: 0.44s; }
+.reveal.visible > *:nth-child(8) { transition-delay: 0.51s; }
+
+/* Keyboard focus visibility */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--aqua);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
+  .reveal, .reveal > * { opacity: 1 !important; transform: none !important; }
+}
 
-  /* fill-in row */
-  .fill{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
-  .fill-box{ border:1.5px dashed var(--line); border-radius:8px; padding:8px 11px; background:var(--sand); }
-  .fill-box .lbl{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.08em; color:var(--mut); font-weight:700; }
-  .fill-box .val{ display:block; font-size:1rem; font-weight:800; color:var(--ocean); margin-top:3px; }
+/* ============ DEMO APP: ENROLLMENT + LIVE DASHBOARD ============ */
 
-  /* moves */
-  .moves ol{ list-style:none; counter-reset:m; display:flex; flex-direction:column; gap:7px; }
-  .moves li{
-    counter-increment:m; position:relative; padding:8px 11px 8px 40px;
-    border:1px solid var(--line); border-left:4px solid var(--teal); border-radius:8px; background:var(--tint);
-  }
-  .moves li::before{
-    content:counter(m); position:absolute; left:9px; top:8px;
-    width:23px; height:23px; border-radius:50%; background:var(--ocean); color:#fff;
-    font-size:.8rem; font-weight:800; display:flex; align-items:center; justify-content:center;
-  }
-  .moves .t{ font-weight:800; font-size:.9rem; }
-  .moves .say{ font-style:italic; color:var(--ocean); font-size:.85rem; margin-top:1px; }
-  .moves .why{ font-size:.74rem; color:var(--mut); margin-top:1px; }
+/* ---- Overlay shell ---- */
+.sx-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem;
+  background: rgba(6,42,58,0.55);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s ease, visibility .35s;
+}
+.sx-overlay.open { opacity: 1; visibility: visible; }
 
-  .two{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
+.sx-modal {
+  background: var(--cream);
+  width: 100%; max-width: 560px;
+  max-height: 92vh; overflow-y: auto;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  transform: translateY(18px) scale(.98);
+  transition: transform .35s cubic-bezier(.16,1,.3,1);
+}
+.sx-overlay.open .sx-modal { transform: none; }
 
-  /* value stack */
-  .stack table{ width:100%; border-collapse:collapse; font-size:.8rem; }
-  .stack td{ padding:2.5px 0; border-bottom:1px dotted var(--line); }
-  .stack td.v{ text-align:right; font-variant-numeric:tabular-nums; color:var(--mut); }
-  .stack tr.tot td{ border-top:1.5px solid var(--ink); border-bottom:none; padding-top:5px; font-weight:700; }
-  .stack tr.tot td.v{ text-decoration:line-through; color:var(--mut); }
-  .stack tr.price td{ border-bottom:none; padding-top:4px; font-weight:800; color:var(--coral); font-size:.95rem; }
-  .stack tr.price td.v{ color:var(--coral); }
+.sx-modal-head {
+  position: relative;
+  padding: 1.6rem 1.75rem 1.25rem;
+  background: var(--grad-brand);
+  color: #fff;
+  border-radius: 24px 24px 0 0;
+}
+.sx-modal-head h3 { font-family:'DM Serif Display',serif; font-size:1.5rem; line-height:1.15; }
+.sx-modal-head p { font-size:.85rem; opacity:.88; margin-top:.25rem; }
 
-  /* objections */
-  .obj .o{ margin-bottom:8px; }
-  .obj .q{ font-weight:800; font-size:.82rem; }
-  .obj .q::before{ content:"“"; }
-  .obj .q::after{ content:"”"; }
-  .obj .a{ font-size:.8rem; color:var(--ocean); }
-  .obj .a::before{ content:"→ "; color:var(--teal); font-weight:800; }
+.sx-close {
+  position:absolute; top:1rem; right:1rem;
+  width:34px; height:34px; border-radius:50%;
+  border:none; cursor:pointer;
+  background:rgba(255,255,255,.2); color:#fff;
+  font-size:1rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .25s;
+}
+.sx-close:hover { background:rgba(255,255,255,.35); }
 
-  /* close */
-  .close{ margin-top:14px; border:2px solid var(--coral); border-radius:10px; padding:11px 14px; background:#fdf3f0; }
-  .close .close-line{ font-size:.98rem; font-weight:800; font-style:italic; color:#a23316; }
-  .close .then{ font-size:.82rem; font-weight:700; color:var(--ink); margin-top:4px; letter-spacing:.02em; }
+.sx-langs { display:flex; gap:.4rem; margin-top:1rem; }
+.sx-lang {
+  border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.12);
+  color:#fff; padding:.3rem .85rem; border-radius:100px;
+  font-size:.75rem; font-weight:600; cursor:pointer; transition:all .2s;
+  font-family:inherit;
+}
+.sx-lang.active { background:#fff; color:var(--ocean); }
 
-  /* do / don't */
-  .dod h2{ margin-bottom:5px; }
-  .dod ul{ list-style:none; font-size:.8rem; }
-  .dod li{ padding:2px 0 2px 20px; position:relative; }
-  .do li::before{ content:"✓"; position:absolute; left:0; color:#1f9d57; font-weight:800; }
-  .dont li::before{ content:"✕"; position:absolute; left:0; color:var(--coral); font-weight:800; }
+/* ---- Form ---- */
+.sx-form { padding:1.5rem 1.75rem 1.75rem; }
+.sx-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.sx-field { margin-bottom:1.05rem; }
+.sx-field.full { grid-column:1 / -1; }
+.sx-field label {
+  display:block; font-size:.78rem; font-weight:600; color:var(--deep);
+  margin-bottom:.4rem;
+}
+.sx-field label .req { color:var(--coral); }
+.sx-input, .sx-select {
+  width:100%; padding:.8rem .9rem;
+  border:1.5px solid rgba(11,79,108,.15); border-radius:12px;
+  background:#fff; font-family:inherit; font-size:.9rem; color:var(--slate);
+  transition:border-color .2s, box-shadow .2s;
+}
+.sx-input:focus, .sx-select:focus {
+  outline:none; border-color:var(--aqua);
+  box-shadow:0 0 0 3px rgba(46,196,182,.15);
+}
 
-  footer{
-    margin-top:14px; border-top:1px solid var(--line); padding-top:8px;
-    font-size:.74rem; color:var(--mut); text-align:center;
-  }
-  footer b{ color:var(--ocean); }
+.sx-choices { display:flex; flex-wrap:wrap; gap:.5rem; }
+.sx-choice {
+  flex:1 1 calc(50% - .5rem);
+  border:1.5px solid rgba(11,79,108,.15); border-radius:12px;
+  padding:.7rem .6rem; cursor:pointer; background:#fff;
+  display:flex; align-items:center; gap:.55rem; font-size:.85rem; font-weight:500;
+  transition:all .2s; color:var(--slate);
+}
+.sx-choice .em { font-size:1.15rem; }
+.sx-choice.active { border-color:var(--aqua); background:var(--mist); color:var(--ocean); font-weight:600; }
 
-  @media print{
-    body{ background:#fff; }
-    .no-print{ display:none !important; }
-    .sheet{ box-shadow:none; margin:0; max-width:none; padding:0; border-radius:0; }
-  }
+.sx-submit { width:100%; justify-content:center; margin-top:.4rem; font-size:.95rem; padding:1rem; }
+.sx-form-foot { text-align:center; font-size:.72rem; color:#8a9ba8; margin-top:.9rem; }
+
+/* ---- Success / WhatsApp confirmation ---- */
+.sx-success { padding:2.25rem 1.75rem; text-align:center; }
+.sx-success .tick {
+  width:78px; height:78px; border-radius:50%; margin:0 auto 1.25rem;
+  background:linear-gradient(135deg,var(--teal),var(--leaf));
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.2rem; color:#fff;
+  box-shadow:0 12px 30px rgba(46,196,182,.4);
+  animation:sxPop .5s cubic-bezier(.16,1.4,.3,1);
+}
+@keyframes sxPop { from{transform:scale(.4);opacity:0;} to{transform:scale(1);opacity:1;} }
+.sx-success h3 { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--deep); margin-bottom:.4rem; }
+.sx-success p.sub { color:#6b7f8e; font-size:.9rem; margin-bottom:1.1rem; }
+.sx-fid {
+  display:inline-block; background:var(--mist); color:var(--ocean);
+  font-weight:700; letter-spacing:.05em; padding:.5rem 1.1rem; border-radius:100px;
+  font-size:.95rem; margin-bottom:1.4rem;
+}
+.sx-wa {
+  text-align:left; background:#fff; border:1px solid rgba(11,79,108,.1);
+  border-radius:16px; padding:1rem 1.1rem; box-shadow:var(--shadow-sm);
+  display:flex; gap:.85rem; align-items:flex-start; margin-bottom:1.4rem;
+}
+.sx-wa .wa-ic {
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.25rem;
+}
+.sx-wa .wa-body { font-size:.82rem; line-height:1.5; color:var(--slate); }
+.sx-wa .wa-body strong { color:var(--deep); }
+.sx-wa .wa-time { font-size:.68rem; color:#8a9ba8; margin-top:.35rem; }
+
+/* ---- Dashboard ---- */
+.sx-dash {
+  position:fixed; inset:0; z-index:290;
+  background:var(--sand); overflow-y:auto;
+  opacity:0; visibility:hidden;
+  transition:opacity .4s ease, visibility .4s;
+}
+.sx-dash.open { opacity:1; visibility:visible; }
+
+.sx-dash-bar {
+  position:sticky; top:0; z-index:5;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding:1rem 1.5rem;
+  background:var(--deep); color:#fff;
+  box-shadow:0 4px 24px rgba(6,42,58,.25);
+}
+.sx-dash-title { display:flex; align-items:center; gap:.7rem; }
+.sx-dash-title h2 { font-family:'DM Serif Display',serif; font-size:1.25rem; line-height:1; }
+.sx-dash-title .sub { font-size:.72rem; opacity:.6; margin-top:.2rem; }
+.sx-live {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.66rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  background:rgba(46,196,182,.18); color:var(--teal);
+  padding:.35rem .7rem; border-radius:100px;
+}
+.sx-live .d { width:7px; height:7px; border-radius:50%; background:var(--teal); animation:pulse 1.6s infinite; }
+.sx-dash-actions { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+.sx-btn-sm {
+  border:none; cursor:pointer; font-family:inherit; font-weight:600; font-size:.8rem;
+  padding:.6rem 1.05rem; border-radius:100px; display:inline-flex; align-items:center; gap:.4rem;
+  transition:all .25s;
+}
+.sx-btn-ghost { background:rgba(255,255,255,.12); color:#fff; }
+.sx-btn-ghost:hover { background:rgba(255,255,255,.22); }
+.sx-btn-light { background:#fff; color:var(--ocean); }
+.sx-btn-light:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.18); }
+
+.sx-dash-wrap { max-width:1180px; margin:0 auto; padding:1.5rem; }
+
+.sx-kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.25rem; }
+.sx-kpi {
+  background:#fff; border-radius:18px; padding:1.4rem 1.3rem;
+  box-shadow:var(--shadow-sm); border:1px solid rgba(11,79,108,.05);
+}
+.sx-kpi .ic {
+  width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; margin-bottom:.8rem;
+}
+.sx-kpi .val { font-family:'DM Serif Display',serif; font-size:2.1rem; line-height:1; color:var(--deep); }
+.sx-kpi .lab { font-size:.78rem; color:#6b7f8e; margin-top:.35rem; font-weight:500; }
+.sx-kpi .delta { font-size:.68rem; font-weight:600; color:var(--leaf); margin-top:.5rem; }
+
+.sx-charts { display:grid; grid-template-columns:1.3fr 1fr; gap:1rem; margin-bottom:1.25rem; }
+.sx-panel {
+  background:#fff; border-radius:18px; padding:1.4rem 1.5rem;
+  box-shadow:var(--shadow-sm); border:1px solid rgba(11,79,108,.05);
+}
+.sx-panel h4 {
+  font-size:.92rem; color:var(--deep); font-weight:600; margin-bottom:1.1rem;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.sx-panel h4 .mut { font-size:.72rem; color:#8a9ba8; font-weight:500; }
+
+.sx-bars { display:flex; flex-direction:column; gap:.7rem; }
+.sx-bar-row { display:grid; grid-template-columns:120px 1fr 44px; align-items:center; gap:.6rem; font-size:.8rem; }
+.sx-bar-row .nm { color:var(--slate); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sx-bar-track { height:11px; background:var(--mist); border-radius:100px; overflow:hidden; }
+.sx-bar-fill { height:100%; border-radius:100px; background:var(--grad-aqua); width:0; transition:width 1s cubic-bezier(.16,1,.3,1); }
+.sx-bar-row .vl { text-align:right; font-weight:600; color:var(--ocean); }
+
+.sx-donut-wrap { display:flex; align-items:center; gap:1.5rem; }
+.sx-donut {
+  width:150px; height:150px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; position:relative;
+  background:var(--mist);
+}
+.sx-donut::after { content:''; position:absolute; inset:26px; background:#fff; border-radius:50%; }
+.sx-donut .ctr { position:relative; z-index:1; text-align:center; }
+.sx-donut .ctr b { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--deep); display:block; line-height:1; }
+.sx-donut .ctr span { font-size:.65rem; color:#8a9ba8; }
+.sx-legend { display:flex; flex-direction:column; gap:.55rem; flex:1; }
+.sx-leg { display:flex; align-items:center; gap:.55rem; font-size:.82rem; }
+.sx-leg .sw { width:12px; height:12px; border-radius:4px; flex-shrink:0; }
+.sx-leg .nm { color:var(--slate); flex:1; }
+.sx-leg .vl { font-weight:600; color:var(--deep); }
+
+.sx-lower { display:grid; grid-template-columns:1fr 1.1fr; gap:1rem; }
+.sx-spark { width:100%; height:120px; display:block; }
+.sx-table { width:100%; border-collapse:collapse; font-size:.8rem; }
+.sx-table th {
+  text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em;
+  color:#8a9ba8; font-weight:600; padding:.5rem .6rem; border-bottom:1px solid rgba(11,79,108,.08);
+}
+.sx-table td { padding:.6rem .6rem; border-bottom:1px solid rgba(11,79,108,.05); color:var(--slate); }
+.sx-table tr:last-child td { border-bottom:none; }
+.sx-badge {
+  font-size:.66rem; font-weight:600; padding:.2rem .6rem; border-radius:100px;
+  background:rgba(58,139,74,.12); color:var(--leaf);
+}
+
+.sx-toast {
+  position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(160%);
+  z-index:400;
+  background:var(--deep); color:#fff;
+  padding:.85rem 1.4rem; border-radius:100px;
+  box-shadow:var(--shadow-lg);
+  display:flex; align-items:center; gap:.6rem; font-size:.85rem; font-weight:500;
+  transition:transform .45s cubic-bezier(.16,1.4,.3,1);
+}
+.sx-toast.show { transform:translateX(-50%) translateY(0); }
+.sx-toast .em { font-size:1.1rem; }
+
+@media (max-width:860px) {
+  .sx-kpis { grid-template-columns:repeat(2,1fr); }
+  .sx-charts { grid-template-columns:1fr; }
+  .sx-lower { grid-template-columns:1fr; }
+}
+@media (max-width:560px) {
+  .sx-row { grid-template-columns:1fr; }
+  .sx-bar-row { grid-template-columns:92px 1fr 38px; }
+  .sx-dash-title .sub { display:none; }
+  .sx-dash-bar { flex-wrap:wrap; }
+}
 </style>
 </head>
 <body>
 
-  <div class="toolbar no-print">
-    <p>This is your meeting cheat-sheet. Click print, or use <b>Ctrl/Cmd + P</b> → “Save as PDF”.</p>
-    <button onclick="window.print()">🖨 Print / Save as PDF</button>
+<div class="scroll-progress" id="progress"></div>
+<div class="water-texture"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-logo" role="img" aria-label="Shrimp">🦐</span>
+    <div class="nav-brand-text">
+      Shrimpact
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#dashboard" class="js-dashboard">Live Dashboard</a></li>
+    <li><a href="#enroll" class="nav-cta js-enroll">Enroll Now</a></li>
+  </ul>
+  <button class="mobile-menu" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--deep)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Sustainable Aquaculture Initiative
+      </div>
+      <h1>Empowering Farmers Through <em>Sustainable</em> Aquaculture</h1>
+      <p class="hero-desc">Shrimpact transforms rural livelihoods by equipping farmers with modern aquaculture techniques that are productive, profitable, and planet-friendly.</p>
+      <div class="hero-buttons">
+        <a href="#enroll" class="btn-primary js-enroll">
+          Enroll as a Farmer
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#programs" class="btn-secondary">Explore Programs</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h3>12K+</h3>
+          <p>Farmers Trained</p>
+        </div>
+        <div class="stat-item">
+          <h3>85%</h3>
+          <p>Income Increase</p>
+        </div>
+        <div class="stat-item">
+          <h3>40%</h3>
+          <p>CO₂ Reduction</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-illustration">
+        <div class="hero-circle">
+          <!-- Large Logo -->
+          <span class="hero-logo-large" role="img" aria-label="Shrimp">🦐</span>
+        </div>
+        <!-- Floating cards -->
+        <div class="floating-card card-fish">
+          <div class="icon">🐟</div>
+          <div>
+            <strong>Fish Farming</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">Sustainable Species</span>
+          </div>
+        </div>
+        <div class="floating-card card-crop">
+          <div class="icon">🌾</div>
+          <div>
+            <strong>Feed Systems</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">Organic Ingredients</span>
+          </div>
+        </div>
+        <div class="floating-card card-co2">
+          <div class="icon">🌿</div>
+          <div>
+            <strong>Low Carbon</strong><br>
+            <span style="font-size:0.7rem;color:#8a9ba8">40% CO₂ Reduced</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0 60 Q360 120 720 60 Q1080 0 1440 60 L1440 120 L0 120Z" fill="white"/>
+  </svg>
+</section>
 
-  <div class="sheet">
-    <header>
-      <div class="brand"><span class="em">🦐</span> SHRIMPACT — PITCH CHEAT SHEET</div>
-      <div class="goal">Close the demo at <b>₹60,000</b>. &nbsp;Lead with their funding · let the demo talk · stay silent after the ask.</div>
-    </header>
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-pad">
+    <div class="reveal">
+      <p class="section-label">About Shrimpact</p>
+      <h2 class="section-title">Building Sustainable Livelihoods<br>Through Innovation</h2>
+      <p class="section-desc">Shrimpact integrates agricultural science, business training, and environmental stewardship to transform farming communities.</p>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-image">
+        <!-- Decorative illustration inside -->
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Water waves -->
+          <g opacity="0.3">
+            <path d="M0 180 Q100 160 200 180 Q300 200 400 180 L400 300 L0 300Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M0 200 Q100 180 200 200 Q300 220 400 200 L400 300 L0 300Z" fill="rgba(255,255,255,0.15)"/>
+            <path d="M0 220 Q100 200 200 220 Q300 240 400 220 L400 300 L0 300Z" fill="rgba(255,255,255,0.1)"/>
+          </g>
+          <!-- Fish -->
+          <g transform="translate(160, 220)" opacity="0.7">
+            <ellipse cx="0" cy="0" rx="30" ry="12" fill="white"/>
+            <polygon points="28,-10 40,0 28,10" fill="white"/>
+            <circle cx="-15" cy="-3" r="3" fill="#0B4F6C"/>
+          </g>
+          <g transform="translate(280, 240)" opacity="0.5">
+            <ellipse cx="0" cy="0" rx="20" ry="8" fill="white"/>
+            <polygon points="18,-7 28,0 18,7" fill="white"/>
+            <circle cx="-10" cy="-2" r="2" fill="#0B4F6C"/>
+          </g>
+          <!-- Person farming -->
+          <g transform="translate(200, 100)" opacity="0.8">
+            <circle cx="0" cy="0" r="18" fill="white" opacity="0.9"/>
+            <rect x="-12" y="22" width="24" height="40" rx="8" fill="white" opacity="0.8"/>
+            <!-- Hands holding crop -->
+            <line x1="-20" y1="35" x2="-35" y2="25" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+            <line x1="20" y1="35" x2="35" y2="25" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+            <!-- Plant -->
+            <line x1="0" y1="-25" x2="0" y2="-55" stroke="#7BC950" stroke-width="2.5"/>
+            <path d="M-8 -40 Q0 -48 0 -40" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M8 -40 Q0 -48 0 -40" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M-10 -50 Q0 -58 0 -50" stroke="#7BC950" stroke-width="2" fill="none"/>
+            <path d="M10 -50 Q0 -58 0 -50" stroke="#7BC950" stroke-width="2" fill="none"/>
+          </g>
+          <!-- Bubbles -->
+          <circle cx="100" cy="250" r="4" fill="white" opacity="0.3"/>
+          <circle cx="120" cy="235" r="3" fill="white" opacity="0.2"/>
+          <circle cx="300" cy="260" r="5" fill="white" opacity="0.25"/>
+          <circle cx="320" cy="245" r="3" fill="white" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(24,160,160,0.12);">🎓</div>
+          <div>
+            <h4>Farmer Training Programs</h4>
+            <p>Hands-on workshops in modern aquaculture practices, from pond management to species selection and feed optimization.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(58,139,74,0.12);">🔬</div>
+          <div>
+            <h4>Research & Innovation</h4>
+            <p>Developing climate-resilient farming techniques through selective breeding, sustainable feed formulations, and low-carbon rearing systems.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(232,163,56,0.12);">🤝</div>
+          <div>
+            <h4>Market Linkages</h4>
+            <p>Connecting farmers directly with buyers, reducing middleman costs, and ensuring fair prices for sustainably farmed produce.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon" style="background:rgba(232,93,58,0.12);">🌍</div>
+          <div>
+            <h4>Environmental Stewardship</h4>
+            <p>Reducing the carbon footprint of aquaculture through GHG monitoring, conservation guidelines, and eco-friendly practices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Fill in before you walk in -->
-    <div class="fill">
-      <div class="fill-box"><span class="lbl">Their funding target</span><span class="val">₹ ____________</span></div>
-      <div class="fill-box"><span class="lbl">Decision / pitch date</span><span class="val">____________</span></div>
-      <div class="fill-box"><span class="lbl">So ₹60k is only</span><span class="val">______ % of it</span></div>
+<!-- AQUACULTURE WHEEL -->
+<section class="wheel-section" id="aquaculture">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Sustainable Aquaculture Ecosystem</p>
+      <h2 class="section-title">Our Integrated Approach</h2>
+      <p class="section-desc" style="margin:0 auto;">Every element of the aquaculture value chain optimized for productivity, sustainability, and farmer prosperity.</p>
+    </div>
+    <div class="wheel-container reveal">
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(46,196,182,0.15);">🐟</div>
+        <h3>Farmed Species</h3>
+        <p>Selecting climate-adapted, high-yield species suited to local water conditions and market demand across regions.</p>
+        <span class="tag" style="background:rgba(46,196,182,0.15);color:var(--teal);">Biodiversity</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(123,201,80,0.15);">🧬</div>
+        <h3>Selective Breeding</h3>
+        <p>Genetic improvement programs that develop disease-resistant, faster-growing strains while maintaining genetic diversity.</p>
+        <span class="tag" style="background:rgba(123,201,80,0.15);color:var(--lime);">Genetics</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(11,79,108,0.15);">🏗️</div>
+        <h3>Rearing Systems</h3>
+        <p>Modern pond, cage, and recirculating aquaculture systems (RAS) designed for maximum yield with minimal water usage.</p>
+        <span class="tag" style="background:rgba(11,79,108,0.15);color:var(--ocean);">Infrastructure</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(232,163,56,0.15);">🎣</div>
+        <h3>Capture Fisheries</h3>
+        <p>Responsible wild-catch practices integrated with aquaculture to maintain ecosystem balance and supplement farm output.</p>
+        <span class="tag" style="background:rgba(232,163,56,0.15);color:var(--gold);">Wild Catch</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(232,93,58,0.15);">📋</div>
+        <h3>Consumption Guidelines</h3>
+        <p>Nutritional awareness programs promoting safe consumption, food safety standards, and value-added processing.</p>
+        <span class="tag" style="background:rgba(232,93,58,0.15);color:var(--coral);">Nutrition</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(46,196,182,0.15);">💨</div>
+        <h3>GHG Reduction</h3>
+        <p>Monitoring and reducing methane (CH₄) and nitrous oxide (N₂O) emissions from ponds through aeration and bioremediation.</p>
+        <span class="tag" style="background:rgba(46,196,182,0.15);color:var(--teal);">Climate</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(123,201,80,0.15);">🌾</div>
+        <h3>Feed & Ingredients</h3>
+        <p>Locally-sourced, sustainable feed formulations using plant-based proteins and insect meal to replace fish meal dependency.</p>
+        <span class="tag" style="background:rgba(123,201,80,0.15);color:var(--lime);">Nutrition</span>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-icon" style="background:rgba(11,79,108,0.15);">👣</div>
+        <h3>Carbon Footprint</h3>
+        <p>Life-cycle assessment tools helping farmers track, report, and offset their carbon emissions across the entire supply chain.</p>
+        <span class="tag" style="background:rgba(11,79,108,0.15);color:var(--ocean);">Tracking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Our Programs</p>
+      <h2 class="section-title">Pathways to Prosperity</h2>
+      <p class="section-desc" style="margin:0 auto;">Comprehensive programs designed for farmers at every stage of their aquaculture journey.</p>
+    </div>
+    <div class="programs-grid reveal">
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #E8F4F4, #d0eded);">
+          <div class="program-icon">🐠</div>
+        </div>
+        <div class="program-body">
+          <h3>Beginner Fish Farming</h3>
+          <p>A 12-week immersive program covering pond construction, water quality management, species selection, and your first harvest cycle.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #E8F0E4, #d0e8c8);">
+          <div class="program-icon">🌿</div>
+        </div>
+        <div class="program-body">
+          <h3>Sustainable Practices</h3>
+          <p>Advanced certification in low-carbon aquaculture, organic feed production, integrated multi-trophic systems, and carbon credit eligibility.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-top" style="background:linear-gradient(135deg, #FFF3E0, #FFE0B2);">
+          <div class="program-icon">📊</div>
+        </div>
+        <div class="program-body">
+          <h3>Agri-Business School</h3>
+          <p>Business skills for farmer-entrepreneurs: financial planning, market analysis, supply chain management, and direct-to-consumer sales.</p>
+          <a href="#" class="program-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="section-pad">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">Our Impact</p>
+      <h2 class="section-title">Transforming Communities</h2>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="impact-card">
+        <div class="impact-number">12,400+</div>
+        <div class="impact-label">Farmers Trained</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">850</div>
+        <div class="impact-label">Ponds Established</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">₹42Cr</div>
+        <div class="impact-label">Revenue Generated</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">40%</div>
+        <div class="impact-label">Avg CO₂ Reduction</div>
+      </div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:2.5rem;">
+      <a href="#dashboard" class="btn-primary js-dashboard">
+        View Live Enrollment Dashboard
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="section-pad">
+    <div class="cta-content reveal">
+      <h2>Ready to Transform<br>Your Farm?</h2>
+      <p>Join thousands of farmers building sustainable, profitable aquaculture operations with Shrimpact's expert guidance.</p>
+      <div class="cta-buttons">
+        <a href="#enroll" class="btn-white js-enroll">
+          Enroll Now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#dashboard" class="btn-outline-white js-dashboard">View Dashboard</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-brand" style="color:white;">
+        <span class="nav-logo" role="img" aria-label="Shrimp">🦐</span>
+        <div class="nav-brand-text" style="color:white;">
+          Shrimpact
+        </div>
+      </a>
+      <p>Transforming rural livelihoods through sustainable aquaculture innovation, farmer empowerment, and environmental stewardship.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <a href="#">Fish Farming</a>
+      <a href="#">Sustainable Practices</a>
+      <a href="#">Agri-Business School</a>
+      <a href="#">Selective Breeding</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Research Papers</a>
+      <a href="#">Farmer Handbook</a>
+      <a href="#">Carbon Calculator</a>
+      <a href="#">Market Prices</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="#">info@shrimpact.in</a>
+      <a href="#">+91 XXXX XXXXXX</a>
+      <a href="#">Twitter / X</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Shrimpact. All rights reserved.</span>
+    <span>Built with 🌱 for Indian Farmers</span>
+  </div>
+</footer>
+
+<!-- ================= DEMO APP: ENROLLMENT MODAL ================= -->
+<div class="sx-overlay" id="sxEnroll" role="dialog" aria-modal="true" aria-labelledby="sxEnrollTitle">
+  <div class="sx-modal">
+    <div class="sx-modal-head">
+      <button class="sx-close" type="button" data-close aria-label="Close">✕</button>
+      <h3 id="sxEnrollTitle" data-i18n="title">Farmer Enrollment</h3>
+      <p data-i18n="subtitle">Join the Shrimpact program — it only takes 2 minutes.</p>
+      <div class="sx-langs">
+        <button type="button" class="sx-lang active" data-lang="en">English</button>
+        <button type="button" class="sx-lang" data-lang="hi">हिंदी</button>
+        <button type="button" class="sx-lang" data-lang="te">తెలుగు</button>
+      </div>
     </div>
 
-    <section class="moves">
-      <h2>The 5 moves — in this order</h2>
-      <ol>
-        <li>
-          <div class="t">Lead with THEIR number — not your price</div>
-          <div class="say">“How much funding are you going after, and when's the decision?”</div>
-          <div class="why">Write it down. Every number after this anchors to it.</div>
-        </li>
-        <li>
-          <div class="t">Reframe: proof, not promises</div>
-          <div class="say">“Committees fund proof, not slides. Let me give you a live product they can touch.”</div>
-        </li>
-        <li>
-          <div class="t">Let the demo close it</div>
-          <div class="say">Hand them a phone → “Enroll a farmer.” Then open the dashboard → “See the count jump? Districts, women farmers, acres — live. One click exports it for your grant report.”</div>
-        </li>
-        <li>
-          <div class="t">Stack the value, THEN say the price</div>
-          <div class="say">“Built properly this is 1.35 lakh of work. Because it's a focused demo for your pitch — ₹60,000. That's about ___% of the ₹___ you're going after.”</div>
-        </li>
-        <li>
-          <div class="t">Ask for the start — then go silent</div>
-          <div class="say">“Half now, half on delivery, unlimited revisions till you're proud of it. Any reason we wouldn't start today?”</div>
-          <div class="why">Then STOP. The next person who speaks loses.</div>
-        </li>
-      </ol>
-    </section>
+    <form class="sx-form" id="sxForm" novalidate>
+      <div class="sx-field full">
+        <label><span data-i18n="name">Full Name</span> <span class="req">*</span></label>
+        <input class="sx-input" name="name" required data-ph="name_ph" placeholder="e.g. Venkateswara Rao">
+      </div>
+      <div class="sx-row">
+        <div class="sx-field">
+          <label><span data-i18n="mobile">Mobile Number</span> <span class="req">*</span></label>
+          <input class="sx-input" name="mobile" required inputmode="numeric" maxlength="10" placeholder="98765 43210">
+        </div>
+        <div class="sx-field">
+          <label data-i18n="gender">Gender</label>
+          <select class="sx-select" name="gender">
+            <option value="Male" data-i18n="g_male">Male</option>
+            <option value="Female" data-i18n="g_female">Female</option>
+            <option value="Other" data-i18n="g_other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="sx-row">
+        <div class="sx-field">
+          <label><span data-i18n="state">State</span> <span class="req">*</span></label>
+          <select class="sx-select" name="state" id="sxState" required></select>
+        </div>
+        <div class="sx-field">
+          <label><span data-i18n="district">District</span> <span class="req">*</span></label>
+          <select class="sx-select" name="district" id="sxDistrict" required></select>
+        </div>
+      </div>
+      <div class="sx-row">
+        <div class="sx-field">
+          <label data-i18n="village">Village</label>
+          <input class="sx-input" name="village" placeholder="—">
+        </div>
+        <div class="sx-field">
+          <label data-i18n="pond">Pond size (acres)</label>
+          <input class="sx-input" name="pond" inputmode="decimal" placeholder="e.g. 2.5">
+        </div>
+      </div>
+      <div class="sx-field full">
+        <label data-i18n="type">Type of Aquaculture</label>
+        <div class="sx-choices" id="sxTypes">
+          <div class="sx-choice active" data-type="Shrimp"><span class="em">🦐</span><span data-i18n="t_shrimp">Shrimp</span></div>
+          <div class="sx-choice" data-type="Fish"><span class="em">🐟</span><span data-i18n="t_fish">Fish</span></div>
+          <div class="sx-choice" data-type="Crab"><span class="em">🦀</span><span data-i18n="t_crab">Crab</span></div>
+          <div class="sx-choice" data-type="Mixed"><span class="em">🌊</span><span data-i18n="t_mixed">Mixed / Polyculture</span></div>
+        </div>
+      </div>
+      <div class="sx-field full">
+        <label data-i18n="program">Program of Interest</label>
+        <select class="sx-select" name="program">
+          <option value="Beginner Fish Farming" data-i18n="p1">Beginner Fish Farming</option>
+          <option value="Sustainable Practices" data-i18n="p2">Sustainable Practices</option>
+          <option value="Agri-Business School" data-i18n="p3">Agri-Business School</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary sx-submit" data-i18n="submit">Enroll Now</button>
+      <p class="sx-form-foot" data-i18n="foot">🔒 Your details are safe. A field officer will contact you within 48 hours.</p>
+    </form>
 
-    <div class="two">
-      <section class="stack">
-        <h2>Value stack — read before the price</h2>
-        <table>
-          <tr><td>Mobile farmer-enrollment app</td><td class="v">₹40,000</td></tr>
-          <tr><td>Live impact dashboard (for funders)</td><td class="v">₹30,000</td></tr>
-          <tr><td>3 languages (EN / HI / TE)</td><td class="v">₹15,000</td></tr>
-          <tr><td>WhatsApp confirmations</td><td class="v">₹15,000</td></tr>
-          <tr><td>Admin panel + CSV export</td><td class="v">₹15,000</td></tr>
-          <tr><td>Funder-mode share link + 30-day support</td><td class="v">₹20,000</td></tr>
-          <tr class="tot"><td>Total value</td><td class="v">₹1,35,000</td></tr>
-          <tr class="price"><td>Your price</td><td class="v">₹60,000</td></tr>
+    <div class="sx-success" id="sxSuccess" hidden>
+      <div class="tick">✓</div>
+      <h3 data-i18n="s_title">You're Enrolled!</h3>
+      <p class="sub" id="sxSuccessName"></p>
+      <div class="sx-fid" id="sxFid">SHR-0000</div>
+      <div class="sx-wa">
+        <div class="wa-ic">✓</div>
+        <div class="wa-body" id="sxWaBody"></div>
+      </div>
+      <button class="btn-primary sx-submit js-dashboard" type="button" data-i18n="s_view">View Live Impact Dashboard →</button>
+      <button class="sx-btn-sm" style="background:transparent;color:var(--ocean);margin-top:.6rem;width:100%;justify-content:center;" type="button" data-close data-i18n="s_done">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DEMO APP: LIVE DASHBOARD ================= -->
+<div class="sx-dash" id="sxDash" role="dialog" aria-modal="true" aria-label="Live Impact Dashboard">
+  <div class="sx-dash-bar">
+    <div class="sx-dash-title">
+      <span style="font-size:1.6rem;" role="img" aria-label="Shrimp">🦐</span>
+      <div>
+        <h2>Live Impact Dashboard</h2>
+        <div class="sub">Pilot Cohort 2026 · real-time enrollment metrics</div>
+      </div>
+    </div>
+    <div class="sx-dash-actions">
+      <span class="sx-live"><span class="d"></span> Live</span>
+      <button class="sx-btn-sm sx-btn-ghost js-enroll" type="button">＋ Enroll farmer</button>
+      <button class="sx-btn-sm sx-btn-light" id="sxExport" type="button">⬇ Export CSV</button>
+      <button class="sx-btn-sm sx-btn-ghost" data-close-dash type="button">✕ Close</button>
+    </div>
+  </div>
+  <div class="sx-dash-wrap">
+    <div class="sx-kpis" id="sxKpis"></div>
+    <div class="sx-charts">
+      <div class="sx-panel">
+        <h4>Enrollments by District <span class="mut" id="sxDistMut"></span></h4>
+        <div class="sx-bars" id="sxDistBars"></div>
+      </div>
+      <div class="sx-panel">
+        <h4>By Aquaculture Type</h4>
+        <div class="sx-donut-wrap">
+          <div class="sx-donut" id="sxDonut"><div class="ctr"><b id="sxDonutTotal">0</b><span>farmers</span></div></div>
+          <div class="sx-legend" id="sxDonutLegend"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sx-lower">
+      <div class="sx-panel">
+        <h4>Cumulative Enrollment <span class="mut">last 45 days</span></h4>
+        <svg class="sx-spark" id="sxSpark" viewBox="0 0 320 120" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="sx-panel">
+        <h4>Recent Enrollments</h4>
+        <table class="sx-table">
+          <thead><tr><th>Farmer</th><th>District</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody id="sxRecent"></tbody>
         </table>
-      </section>
-
-      <section class="obj">
-        <h2>If they push back</h2>
-        <div class="o"><div class="q">Can you do it cheaper?</div><div class="a">Don't cut price — split terms: “₹30k to start today, ₹30k on delivery.”</div></div>
-        <div class="o"><div class="q">Send me the details, I'll think about it.</div><div class="a">“Sure — when's your pitch date? Let's lock the next step now and work back from it.”</div></div>
-        <div class="o"><div class="q">I need committee / approval.</div><div class="a">“Makes sense — who's in the room and when? I'll give you a one-pager to take in.”</div></div>
-        <div class="o"><div class="q">Why not just a Google Form?</div><div class="a">“A form collects names. This gives the committee a live product + a dashboard to fund.”</div></div>
-      </section>
+      </div>
     </div>
-
-    <section class="close">
-      <div class="close-line">“A live demo + impact dashboard, ready [X] days before your pitch — for ₹60k. Any reason we wouldn't start today?”</div>
-      <div class="then">↳ Then STOP TALKING. Silence does the closing.</div>
-    </section>
-
-    <section class="dod two">
-      <div class="do">
-        <h2>Do</h2>
-        <ul>
-          <li>Call it a “funding-ready enrollment system”</li>
-          <li>Demo on a real phone, in their language</li>
-          <li>Name a deadline tied to their pitch</li>
-          <li>Ask for 50% to book the slot</li>
-        </ul>
-      </div>
-      <div class="dont">
-        <h2>Don't</h2>
-        <ul>
-          <li>Say “website” (kills the price)</li>
-          <li>Quote before they say their funding number</li>
-          <li>Discount — change the terms instead</li>
-          <li>Promise you'll win them the grant</li>
-        </ul>
-      </div>
-    </section>
-
-    <footer>
-      Terms: <b>50% now, 50% on delivery</b> · unlimited revisions · live before their deadline.
-      Plant the upsell: <b>“When the grant lands, the full platform + retainer is the natural next step — and I'm already your guy.”</b>
-    </footer>
   </div>
+</div>
+
+<!-- TOAST -->
+<div class="sx-toast" id="sxToast"><span class="em">🎉</span><span id="sxToastMsg">Saved</span></div>
+
+<script>
+// Mobile menu toggle
+const navLinks = document.getElementById('navLinks');
+const menuBtn = document.querySelector('.mobile-menu');
+function setMenu(open) {
+  navLinks.classList.toggle('show', open);
+  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+menuBtn.addEventListener('click', () => setMenu(!navLinks.classList.contains('show')));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+// Nav scroll effect + scroll progress bar
+const progressBar = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+  progressBar.style.width = pct + '%';
+}, { passive: true });
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Counter animation for impact numbers
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const numbers = entry.target.querySelectorAll('.impact-number');
+      numbers.forEach(num => {
+        const text = num.textContent;
+        const match = text.match(/[\d,]+/);
+        if (match) {
+          const target = parseInt(match[0].replace(/,/g, ''));
+          const prefix = text.substring(0, text.indexOf(match[0]));
+          const suffix = text.substring(text.indexOf(match[0]) + match[0].length);
+          let current = 0;
+          const increment = target / 60;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            const formatted = Math.floor(current).toLocaleString('en-IN');
+            num.textContent = prefix + formatted + suffix;
+          }, 25);
+        }
+      });
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const impactGrid = document.querySelector('.impact-grid');
+if (impactGrid) counterObserver.observe(impactGrid);
+</script>
+
+<!-- ================= DEMO APP LOGIC ================= -->
+<script>
+(function(){
+  'use strict';
+  const LS_KEY = 'shrimpact_enrollments_v1';
+
+  /* ---------- i18n ---------- */
+  const I18N = {
+    en: {
+      title:'Farmer Enrollment', subtitle:'Join the Shrimpact program — it only takes 2 minutes.',
+      name:'Full Name', mobile:'Mobile Number', gender:'Gender', g_male:'Male', g_female:'Female', g_other:'Other',
+      state:'State', district:'District', village:'Village', pond:'Pond size (acres)',
+      type:'Type of Aquaculture', t_shrimp:'Shrimp', t_fish:'Fish', t_crab:'Crab', t_mixed:'Mixed / Polyculture',
+      program:'Program of Interest', p1:'Beginner Fish Farming', p2:'Sustainable Practices', p3:'Agri-Business School',
+      submit:'Enroll Now', foot:'🔒 Your details are safe. A field officer will contact you within 48 hours.',
+      s_title:"You're Enrolled!", s_view:'View Live Impact Dashboard →', s_done:'Done', name_ph:'e.g. Venkateswara Rao'
+    },
+    hi: {
+      title:'किसान नामांकन', subtitle:'श्रिम्पैक्ट कार्यक्रम से जुड़ें — सिर्फ़ 2 मिनट लगते हैं।',
+      name:'पूरा नाम', mobile:'मोबाइल नंबर', gender:'लिंग', g_male:'पुरुष', g_female:'महिला', g_other:'अन्य',
+      state:'राज्य', district:'ज़िला', village:'गाँव', pond:'तालाब का आकार (एकड़)',
+      type:'जलकृषि का प्रकार', t_shrimp:'झींगा', t_fish:'मछली', t_crab:'केकड़ा', t_mixed:'मिश्रित',
+      program:'रुचि का कार्यक्रम', p1:'शुरुआती मछली पालन', p2:'टिकाऊ पद्धतियाँ', p3:'कृषि-व्यवसाय स्कूल',
+      submit:'अभी नामांकन करें', foot:'🔒 आपकी जानकारी सुरक्षित है। फ़ील्ड अधिकारी 48 घंटों में संपर्क करेंगे।',
+      s_title:'आपका नामांकन हो गया!', s_view:'लाइव डैशबोर्ड देखें →', s_done:'पूर्ण', name_ph:'जैसे रमेश कुमार'
+    },
+    te: {
+      title:'రైతు నమోదు', subtitle:'శ్రింప్యాక్ట్ కార్యక్రమంలో చేరండి — కేవలం 2 నిమిషాలు.',
+      name:'పూర్తి పేరు', mobile:'మొబైల్ నంబర్', gender:'లింగం', g_male:'పురుషుడు', g_female:'స్త్రీ', g_other:'ఇతర',
+      state:'రాష్ట్రం', district:'జిల్లా', village:'గ్రామం', pond:'చెరువు పరిమాణం (ఎకరాలు)',
+      type:'ఆక్వాకల్చర్ రకం', t_shrimp:'రొయ్యలు', t_fish:'చేపలు', t_crab:'పీత', t_mixed:'మిశ్రమం',
+      program:'ఆసక్తి ఉన్న కార్యక్రమం', p1:'ప్రాథమిక చేపల పెంపకం', p2:'సుస్థిర పద్ధతులు', p3:'అగ్రి-బిజినెస్ స్కూల్',
+      submit:'ఇప్పుడే నమోదు చేసుకోండి', foot:'🔒 మీ వివరాలు సురక్షితం. ఫీల్డ్ ఆఫీసర్ 48 గంటల్లో సంప్రదిస్తారు.',
+      s_title:'మీరు నమోదయ్యారు!', s_view:'లైవ్ డ్యాష్‌బోర్డ్ చూడండి →', s_done:'పూర్తయింది', name_ph:'ఉదా. వెంకటేశ్వర రావు'
+    }
+  };
+  let lang = 'en';
+  function applyI18n(){
+    const d = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const k = el.getAttribute('data-i18n');
+      if (d[k] != null) el.textContent = d[k];
+    });
+    document.querySelectorAll('[data-ph]').forEach(function(el){
+      const k = el.getAttribute('data-ph');
+      if (d[k] != null) el.placeholder = d[k];
+    });
+  }
+
+  /* ---------- geography ---------- */
+  const GEO = {
+    'Andhra Pradesh': ['West Godavari','East Godavari','Krishna','Guntur','Nellore','Prakasam'],
+    'Telangana': ['Nalgonda','Khammam','Warangal'],
+    'Odisha': ['Bhadrak','Balasore','Ganjam'],
+    'West Bengal': ['Purba Medinipur','North 24 Parganas','South 24 Parganas'],
+    'Tamil Nadu': ['Nagapattinam','Thanjavur','Cuddalore'],
+    'Gujarat': ['Surat','Navsari','Bharuch']
+  };
+  const DISTRICT_STATE = {};
+  Object.keys(GEO).forEach(function(st){ GEO[st].forEach(function(d){ DISTRICT_STATE[d] = st; }); });
+
+  /* ---------- seed data ---------- */
+  const FIRST = ['Venkateswara','Ramesh','Suresh','Srinivas','Nagaraju','Ravi','Koteswara','Satyanarayana','Lakshmi','Anjamma','Padmavathi','Subba','Mohan','Gopala','Bhaskar','Durga','Sita','Pydiraju','Appala','Veerabhadra','Tirupathi','Mariyamma','Prasad','Nageswara','Sridevi','Kanaka','Yellaiah','Chandra'];
+  const LAST = ['Rao','Reddy','Naidu','Patnaik','Das','Mondal','Sahu','Jana','Murthy','Babu','Yadav','Behera','Mahapatra','Swain','Roy','Patel'];
+  const TYPES = ['Shrimp','Fish','Crab','Mixed'];
+  const TYPE_W = ['Shrimp','Shrimp','Shrimp','Shrimp','Shrimp','Fish','Fish','Fish','Crab','Mixed','Mixed'];
+  const PROGRAMS = ['Beginner Fish Farming','Sustainable Practices','Agri-Business School'];
+  const DISTRICT_POOL = [
+    'West Godavari','West Godavari','West Godavari','West Godavari',
+    'Krishna','Krishna','Krishna','Guntur','Guntur','Guntur',
+    'East Godavari','East Godavari','Nellore','Nellore','Prakasam',
+    'Bhadrak','Bhadrak','Balasore','Purba Medinipur','Purba Medinipur',
+    'Nagapattinam','Nalgonda','Surat','North 24 Parganas','Thanjavur'
+  ];
+  function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function seed(){
+    const out = [], now = Date.now(), N = 247;
+    for (let i=0;i<N;i++){
+      const district = rnd(DISTRICT_POOL);
+      const daysAgo = Math.floor(Math.pow(Math.random(),0.6)*45);
+      out.push({
+        id:'SHR-'+String(1000+i),
+        name:rnd(FIRST)+' '+rnd(LAST),
+        mobile:'9'+Math.floor(100000000+Math.random()*899999999),
+        gender:Math.random()<0.36?'Female':'Male',
+        state:DISTRICT_STATE[district]||'Andhra Pradesh',
+        district:district, village:'',
+        pond:+(0.5+Math.random()*7).toFixed(1),
+        type:rnd(TYPE_W), program:rnd(PROGRAMS),
+        ts:now - daysAgo*86400000 - Math.floor(Math.random()*86400000)
+      });
+    }
+    out.sort(function(a,b){ return a.ts-b.ts; });
+    return out;
+  }
+  function load(){
+    let data = null;
+    try { data = JSON.parse(localStorage.getItem(LS_KEY)); } catch(e){}
+    if (!Array.isArray(data) || !data.length){ data = seed(); save(data); }
+    return data;
+  }
+  function save(d){ try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch(e){} }
+  let store = load();
+
+  /* ---------- helpers ---------- */
+  const $ = function(s,el){ return (el||document).querySelector(s); };
+  const $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+  function fmt(n){ return Number(n).toLocaleString('en-IN'); }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function typeEmoji(t){ return {Shrimp:'🦐',Fish:'🐟',Crab:'🦀',Mixed:'🌊'}[t]||'🌊'; }
+  function animateVal(el, to){
+    const dur=900; let startT=null;
+    function step(t){
+      if(startT===null) startT=t;
+      const p=Math.min((t-startT)/dur,1);
+      const v=Math.floor(to*(1-Math.pow(1-p,3)));
+      el.textContent = fmt(v);
+      if(p<1) requestAnimationFrame(step); else el.textContent = fmt(to);
+    }
+    requestAnimationFrame(step);
+  }
+  const TYPE_COLORS = { Shrimp:'#E85D3A', Fish:'#18A0A0', Crab:'#E8A838', Mixed:'#7BC950' };
+
+  /* ---------- dashboard render ---------- */
+  function renderDash(animate){
+    const data = store, total = data.length;
+    const districts = {}; data.forEach(function(d){ districts[d.district]=1; });
+    const distCount = Object.keys(districts).length;
+    const acres = data.reduce(function(s,d){ return s+(+d.pond||0); },0);
+    const women = data.filter(function(d){ return d.gender==='Female'; }).length;
+    const womenPct = total ? Math.round(women/total*100) : 0;
+
+    const kpis = [
+      {ic:'👨‍🌾', bg:'rgba(24,160,160,.14)', val:total, lab:'Farmers Enrolled', delta:'+'+Math.max(1,Math.round(total*0.04))+' this week'},
+      {ic:'📍', bg:'rgba(232,163,56,.16)', val:distCount, lab:'Districts Covered'},
+      {ic:'🌊', bg:'rgba(46,196,182,.16)', val:Math.round(acres), lab:'Acres Enrolled', suffix:' ac'},
+      {ic:'👩‍🌾', bg:'rgba(232,93,58,.14)', val:womenPct, lab:'Women Farmers', suffix:'%'}
+    ];
+    $('#sxKpis').innerHTML = kpis.map(function(k){
+      return '<div class="sx-kpi"><div class="ic" style="background:'+k.bg+'">'+k.ic+'</div>'+
+        '<div class="val"><span class="num">0</span>'+(k.suffix?'<span style="font-size:1.1rem">'+k.suffix+'</span>':'')+'</div>'+
+        '<div class="lab">'+k.lab+'</div>'+(k.delta?'<div class="delta">▲ '+k.delta+'</div>':'')+'</div>';
+    }).join('');
+    $$('#sxKpis .sx-kpi').forEach(function(el,i){
+      const numEl = $('.num',el);
+      if(animate) animateVal(numEl, kpis[i].val); else numEl.textContent = fmt(kpis[i].val);
+    });
+
+    // district bars
+    const byDist = {};
+    data.forEach(function(d){ byDist[d.district]=(byDist[d.district]||0)+1; });
+    const distArr = Object.keys(byDist).map(function(k){ return [k,byDist[k]]; })
+      .sort(function(a,b){ return b[1]-a[1]; }).slice(0,8);
+    const maxDist = distArr.length ? distArr[0][1] : 1;
+    $('#sxDistMut').textContent = distCount+' districts';
+    $('#sxDistBars').innerHTML = distArr.map(function(row){
+      return '<div class="sx-bar-row"><span class="nm">'+row[0]+'</span>'+
+        '<div class="sx-bar-track"><div class="sx-bar-fill" data-w="'+(row[1]/maxDist*100)+'"></div></div>'+
+        '<span class="vl">'+row[1]+'</span></div>';
+    }).join('');
+    requestAnimationFrame(function(){ $$('#sxDistBars .sx-bar-fill').forEach(function(f){ f.style.width=f.dataset.w+'%'; }); });
+
+    // donut by type
+    const byType = {}; TYPES.forEach(function(t){ byType[t]=0; });
+    data.forEach(function(d){ byType[d.type]=(byType[d.type]||0)+1; });
+    let acc=0; const segs=[];
+    TYPES.forEach(function(t){
+      const v=byType[t]; if(!v) return;
+      const start=acc/total*360, end=(acc+v)/total*360; acc+=v;
+      segs.push(TYPE_COLORS[t]+' '+start+'deg '+end+'deg');
+    });
+    $('#sxDonut').style.background = segs.length ? 'conic-gradient('+segs.join(',')+')' : 'var(--mist)';
+    $('#sxDonutTotal').textContent = fmt(total);
+    $('#sxDonutLegend').innerHTML = TYPES.map(function(t){
+      const v=byType[t]||0, pct=total?Math.round(v/total*100):0;
+      return '<div class="sx-leg"><span class="sw" style="background:'+TYPE_COLORS[t]+'"></span>'+
+        '<span class="nm">'+t+'</span><span class="vl">'+v+' · '+pct+'%</span></div>';
+    }).join('');
+
+    renderSpark(data);
+
+    // recent table
+    const recent = data.slice().sort(function(a,b){ return b.ts-a.ts; }).slice(0,7);
+    $('#sxRecent').innerHTML = recent.map(function(d){
+      return '<tr><td>'+escapeHtml(d.name)+'</td><td>'+d.district+'</td>'+
+        '<td>'+typeEmoji(d.type)+' '+d.type+'</td><td><span class="sx-badge">Enrolled</span></td></tr>';
+    }).join('');
+  }
+
+  function renderSpark(data){
+    const svg = $('#sxSpark'), W=320, H=120, pad=6, days=45, now=Date.now();
+    const counts = new Array(days).fill(0);
+    data.forEach(function(d){
+      const idx = days-1 - Math.floor((now - d.ts)/86400000);
+      if(idx>=0 && idx<days) counts[idx]++;
+    });
+    let cum=0; const cumArr = counts.map(function(c){ return cum+=c; });
+    const base = data.length - cum;
+    const series = cumArr.map(function(c){ return base+c; });
+    const max = series[series.length-1]||1, min = series[0]||0;
+    const pts = series.map(function(v,i){
+      const x = pad + i*(W-2*pad)/(days-1);
+      const y = H-pad - (v-min)/Math.max(1,(max-min))*(H-2*pad);
+      return [x,y];
+    });
+    const line = pts.map(function(p){ return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' ');
+    const last = pts[pts.length-1];
+    svg.innerHTML =
+      '<defs><linearGradient id="sxGrad" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0%" stop-color="rgba(46,196,182,.35)"/>'+
+      '<stop offset="100%" stop-color="rgba(46,196,182,0)"/></linearGradient></defs>'+
+      '<polygon points="'+pad+','+(H-pad)+' '+line+' '+(W-pad)+','+(H-pad)+'" fill="url(#sxGrad)"/>'+
+      '<polyline points="'+line+'" fill="none" stroke="#18A0A0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
+      '<circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="4" fill="#0B4F6C"/>';
+  }
+
+  /* ---------- modal + dashboard control ---------- */
+  const enrollOverlay = $('#sxEnroll'), dashEl = $('#sxDash'),
+        formEl = $('#sxForm'), successEl = $('#sxSuccess');
+
+  function populateStates(){
+    const st = $('#sxState'), di = $('#sxDistrict');
+    st.innerHTML = Object.keys(GEO).map(function(s){ return '<option>'+s+'</option>'; }).join('');
+    function fillDist(){ di.innerHTML = GEO[st.value].map(function(d){ return '<option>'+d+'</option>'; }).join(''); }
+    st.addEventListener('change', fillDist);
+    fillDist();
+  }
+  function openEnroll(){
+    formEl.hidden = false; successEl.hidden = true; formEl.reset();
+    $$('#sxTypes .sx-choice').forEach(function(c,i){ c.classList.toggle('active', i===0); });
+    enrollOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeEnroll(){
+    enrollOverlay.classList.remove('open');
+    if(!dashEl.classList.contains('open')) document.body.style.overflow='';
+  }
+  function openDash(animate){
+    dashEl.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderDash(animate !== false);
+  }
+  function closeDash(){
+    dashEl.classList.remove('open');
+    if(!enrollOverlay.classList.contains('open')) document.body.style.overflow='';
+  }
+
+  $('#sxTypes').addEventListener('click', function(e){
+    const c = e.target.closest('.sx-choice'); if(!c) return;
+    $$('#sxTypes .sx-choice').forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+  });
+  $$('.sx-lang').forEach(function(b){
+    b.addEventListener('click', function(){
+      $$('.sx-lang').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); lang = b.dataset.lang; applyI18n();
+    });
+  });
+
+  formEl.addEventListener('submit', function(e){
+    e.preventDefault();
+    const fd = new FormData(formEl);
+    const name = (fd.get('name')||'').toString().trim();
+    const mobile = (fd.get('mobile')||'').toString().replace(/\D/g,'');
+    if(!name){ alert('Please enter the farmer’s name.'); return; }
+    if(mobile.length!==10){ alert('Please enter a valid 10-digit mobile number.'); return; }
+    const activeType = $('#sxTypes .sx-choice.active');
+    const rec = {
+      id:'SHR-'+String(1000+store.length),
+      name:name, mobile:mobile, gender:fd.get('gender')||'Male',
+      state:fd.get('state'), district:fd.get('district'),
+      village:(fd.get('village')||'').toString().trim(),
+      pond:+(fd.get('pond')||0)||0,
+      type:activeType?activeType.dataset.type:'Shrimp',
+      program:fd.get('program'), ts:Date.now()
+    };
+    store.push(rec); save(store);
+    showSuccess(rec);
+    if(dashEl.classList.contains('open')) renderDash(false);
+    toast('🎉 '+name.split(' ')[0]+' enrolled successfully!');
+  });
+
+  function showSuccess(rec){
+    formEl.hidden = true; successEl.hidden = false;
+    $('#sxSuccessName').textContent = rec.name+' · '+rec.district;
+    $('#sxFid').textContent = rec.id;
+    const greet = lang==='te' ? 'నమస్తే' : (lang==='hi' ? 'नमस्ते' : 'Namaste');
+    $('#sxWaBody').innerHTML = '<strong>WhatsApp</strong> · +91 '+escapeHtml(rec.mobile)+'<br>'+
+      greet+' '+escapeHtml(rec.name.split(' ')[0])+'! ✅ You are enrolled in Shrimpact. Your Farmer ID is <strong>'+
+      rec.id+'</strong>. Our field officer will call within 48 hours.'+
+      '<div class="wa-time">Delivered just now</div>';
+  }
+
+  let toastT;
+  function toast(msg){
+    const t = $('#sxToast'); $('#sxToastMsg').textContent = msg;
+    t.classList.add('show'); clearTimeout(toastT);
+    toastT = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+
+  $('#sxExport').addEventListener('click', function(){
+    const cols = ['id','name','mobile','gender','state','district','village','pond_acres','type','program','date'];
+    const rows = store.map(function(r){
+      return [r.id,r.name,r.mobile,r.gender,r.state,r.district,r.village,r.pond,r.type,r.program,
+              new Date(r.ts).toISOString().slice(0,10)];
+    });
+    const csv = [cols.join(',')].concat(rows.map(function(r){
+      return r.map(function(v){ v = v==null?'':String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }).join(',');
+    })).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'shrimpact-enrollments.csv'; a.click();
+    URL.revokeObjectURL(url);
+    toast('⬇ Exported '+store.length+' records to CSV');
+  });
+
+  /* ---------- global wiring ---------- */
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.js-enroll')){ e.preventDefault(); openEnroll(); }
+    else if(e.target.closest('.js-dashboard')){ e.preventDefault(); closeEnroll(); openDash(true); }
+    else if(e.target.closest('[data-close]')){ closeEnroll(); }
+    else if(e.target.closest('[data-close-dash]')){ closeDash(); }
+  });
+  enrollOverlay.addEventListener('click', function(e){ if(e.target===enrollOverlay) closeEnroll(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeEnroll(); closeDash(); } });
+
+  populateStates();
+  applyI18n();
+})();
+</script>
 
 </body>
 </html>
